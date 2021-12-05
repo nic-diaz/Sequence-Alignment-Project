@@ -57,7 +57,7 @@ def main():
 
     start = perf_counter()
     
-    opt, final_s1, final_s2 = basic(s1, s2)
+    opt_alignment, opt, final_s1, final_s2 = basic(s1, s2)
 
     end = perf_counter()
 

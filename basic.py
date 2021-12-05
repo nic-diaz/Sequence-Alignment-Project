@@ -37,6 +37,7 @@ def find_solution(s1, s2, alignment):
 
     for k in range(len(alignment)-1):
 
+        # print(alignment[k])
         x_k, y_k = alignment[k]
 
         if [x_k + 1, y_k + 1] == alignment[k+1]:
@@ -76,20 +77,20 @@ def basic(s1, s2):
     A[:, 0] = np.arange(m) * DELTA
     A[0, :] = np.arange(n) * DELTA
 
-    for i in range(1,m):
-        for j in range(1,n):
+    for j in range(1,n):
+        for i in range(1,m):
             A[i, j] = min(ALPHA[(s1[i-1], s2[j-1])] + A[i-1,j-1], DELTA + A[i-1, j], DELTA + A[i, j-1])
 
     opt_alignment = alignment(A, s1, s2, len(s1), len(s2))
     final_s1, final_s2 = find_solution(s1, s2, opt_alignment[::-1]+[[len(s1),len(s2)]])
 
-    return A[m-1,n-1], final_s1, final_s2
+    return opt_alignment, A[m-1,n-1], final_s1, final_s2
 
 if __name__ == "__main__":
     s1, s2 = ['ACACACTGACTACTGACTGGTGACTACTGACTGGACTGACTACTGACTGGTGACTACTGACTGG', 'TATTATTATACGCTATTATACGCGACGCGGACGCGTATACGCTATTATACGCGACGCGGACGCG']
     # s1, s2 = ['ACACACTGACTACTGACTGGTGACTACTGACTGGACTGACTACTGACTGGTGACTACTGACTGG','TTATTATACGCGACGCGATTATACGCGACGCG']
 
-    opt, final_s1, final_s2 = basic(s1, s2)
+    opt_alignment,opt, final_s1, final_s2 = basic(s1, s2)
     validated_cost = validate(final_s1, final_s2)
 
     print(opt, validated_cost)
