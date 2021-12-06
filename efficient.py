@@ -1,5 +1,7 @@
 from basic import basic, alignment, find_solution, validate
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 ALPHA =     {('A', 'A'): 0, ('A', 'C'): 110, ('A','G'): 48, ('A', 'T'): 94,
              ('C', 'A'): 110, ('C','C'): 0, ('C','G'): 118, ('C','T'): 48,
@@ -9,6 +11,7 @@ ALPHA =     {('A', 'A'): 0, ('A', 'C'): 110, ('A','G'): 48, ('A', 'T'): 94,
 DELTA = 30
 
 P = []
+P_test = []
 
 def space_efficient_alignment(s1,s2):
   m = len(s1) + 1
@@ -53,7 +56,29 @@ def backward_space_efficient_alignment(s1,s2):
 
   return B[:,0]
 
-def efficient(s1, s2):
+def divide_and_conquer_alignment():
+  
+  return 0
+
+def plot_P(P):
+  # plot
+  x = []
+  y = []
+  for item in P:
+    x.append(item[0])
+    y.append(item[1])
+  
+  fig, ax = plt.subplots()
+  plt.scatter(x, y)
+  major_ticks = np.arange(0, 64, 10)
+  minor_ticks = np.arange(0, 64, 1)
+  ax.set_xticks(major_ticks)
+  ax.set_xticks(minor_ticks, minor=True)
+  ax.set_yticks(major_ticks)
+  ax.set_yticks(minor_ticks, minor=True)
+  ax.grid(which='both')
+  
+def efficient(s1, s2, s1_offset=0, s2_offset=0):
   m = len(s1)
   n = len(s2)
 
@@ -61,6 +86,11 @@ def efficient(s1, s2):
     opt_alignment, _, _, _ = basic(s1, s2)
     print(opt_alignment)
     P.extend(opt_alignment)
+    
+    for index in range(len(opt_alignment)):
+      opt_alignment[index][0] += s1_offset 
+      opt_alignment[index][1] += s2_offset
+    P_test.extend(opt_alignment)
     return None
   
   F = space_efficient_alignment(s1, s2[:n//2])
@@ -80,11 +110,16 @@ def efficient(s1, s2):
 
   # print(q)
   P.append([q, n // 2])
+  P_test.append([s1_offset+q, s2_offset+(n//2)])
 
-  efficient(s1[:q], s2[:n//2])
-  efficient(s1[q:], s2[n//2:])
-
-  return P
+  plot_P(P_test)
+  efficient(s1[:q], s2[:n//2], s1_offset, s2_offset)
+  
+  s1_offset+=q
+  s2_offset+= (n//2)
+  efficient(s1[q:], s2[(n//2):], s1_offset, s2_offset)
+  
+  return P_test
 
 if __name__ == "__main__":
   s1, s2 = ['ACACACTGACTACTGACTGGTGACTACTGACTGGACTGACTACTGACTGGTGACTACTGACTGG', 'TATTATTATACGCTATTATACGCGACGCGGACGCGTATACGCTATTATACGCGACGCGGACGCG']
@@ -95,6 +130,11 @@ if __name__ == "__main__":
   # print(opts)
   # print(optbs)
   alignments = efficient(s1, s2)
+  
+  plot_P(alignments)
+  plt.show()
+  
+  
   print(len(s1),len(s2))
   print(alignments)
   final_s1, final_s2 = find_solution(s1, s2, alignments[::-1])
