@@ -1,9 +1,8 @@
-from basic import basic
 from time import perf_counter
 import tracemalloc
 
 # from sequence_alignment1 import alignment
-filename = "BaseTestcases_CS570FinalProject/input1.txt"
+# filename = "BaseTestcases_CS570FinalProject/input1.txt"
 
 def generate_strings(base_strings):
     """
@@ -23,7 +22,7 @@ def generate_strings(base_strings):
     return strings
 
 
-def parse_file():
+def parse_file(filename):
     """
     Returns a dictionary with base strings and indicies for cumulative string creation
     For example: {'ACTG': [3, 6, 1, 1], 'TACG': [1, 2, 9, 2]} 
@@ -57,18 +56,18 @@ def main():
 
     start = perf_counter()
     
-    opt, final_s1, final_s2 = basic(s1, s2)
+   # opt, final_s1, final_s2 = basic(s1, s2)
 
     end = perf_counter()
 
 
-    num = filename.split("/")[-1][5:-4]
+    '''num = filename.split("/")[-1][5:-4]
     with open(f'output{num}.txt','w') as f:
         f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
         f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
         f.write(str(opt) + "\n")
         f.write(str(end-start) + "\n")
-        f.write(str(tracemalloc.get_traced_memory()))
+        f.write(str(tracemalloc.get_traced_memory()))'''
 
 if __name__ == "__main__":
    main()
