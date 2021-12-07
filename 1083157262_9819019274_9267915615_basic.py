@@ -93,8 +93,6 @@ def basic(s1, s2):
     return A[m-1,n-1], final_s1, final_s2
 
 if __name__ == "__main__":
-    # s1, s2 = ['ACACACTGACTACTGACTGGTGACTACTGACTGGACTGACTACTGACTGGTGACTACTGACTGG', 'TATTATTATACGCTATTATACGCGACGCGGACGCGTATACGCTATTATACGCGACGCGGACGCG']
-    # s1, s2 = ['ACACACTGACTACTGACTGGTGACTACTGACTGGACTGACTACTGACTGGTGACTACTGACTGG','TTATTATACGCGACGCGATTATACGCGACGCG']
     base_strings = parse_file(filename)
     strings = generate_strings(base_strings)
     s1, s2 = strings
@@ -107,11 +105,8 @@ if __name__ == "__main__":
 
     end = perf_counter()
 
-
     with open('output.txt','w') as f:
         f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
         f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
         f.write(str(end-start) + "\n")
         f.write(str(tracemalloc.get_traced_memory()))
-
-    
