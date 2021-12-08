@@ -1,14 +1,15 @@
 from time import perf_counter
 import tracemalloc
 
-# from sequence_alignment1 import alignment
-# filename = "BaseTestcases_CS570FinalProject/input1.txt"
+filename = 'input.txt'
 
 def generate_strings(base_strings):
     """
     Generates cumulative strings from base words and insert indicies 
     """
     strings = []
+    i = 0
+    j = 0
 
     for word in base_strings:
         cumulative_string = word
@@ -18,6 +19,12 @@ def generate_strings(base_strings):
                                 cumulative_string[num+1:]
 
         strings.append(cumulative_string)
+        
+        # Validating the final string lengths
+        k = len(base_strings[word])
+        if (2**k)*len(word) != len(cumulative_string):
+            print("ERROR: GENERATING FINAL STRINGS FROM INPUT FILE")
+            quit()
 
     return strings
 
@@ -44,7 +51,7 @@ def parse_file(filename):
 
 def main():
 
-    base_strings = parse_file()
+    base_strings = parse_file(filename)
     print(f"Generated dictionary: {base_strings}\n")
 
     strings = generate_strings(base_strings)
@@ -52,22 +59,7 @@ def main():
 
 
     s1, s2 = strings
-    tracemalloc.start()
 
-    start = perf_counter()
-    
-  # opt, final_s1, final_s2 = basic(s1, s2)
-
-    end = perf_counter()
-
-
-    '''num = filename.split("/")[-1][5:-4]
-    with open(f'output{num}.txt','w') as f:
-        f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
-        f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
-        f.write(str(opt) + "\n")
-        f.write(str(end-start) + "\n")
-        f.write(str(tracemalloc.get_traced_memory()))'''
 
 if __name__ == "__main__":
    main()

@@ -1,7 +1,14 @@
-from basic_1083157262_9819019274_9267915615_iterative import basic, alignment, find_solution, validate
+from  basic_1083157262_9819019274_9267915615_basic import basic, alignment, find_solution, validate
+import sys
 import numpy as np
+from main import parse_file
+from main import generate_strings
 import matplotlib.pyplot as plt
 import itertools
+from time import perf_counter
+import tracemalloc
+
+filename = sys.argv[1]
 
 ALPHA =     {('A', 'A'): 0, ('A', 'C'): 110, ('A','G'): 48, ('A', 'T'): 94,
              ('C', 'A'): 110, ('C','C'): 0, ('C','G'): 118, ('C','T'): 48,
@@ -87,26 +94,36 @@ def efficient(s1, s2, s1_offset=0, s2_offset=0):
   return P
 
 if __name__ == "__main__":
-  s1, s2 = ['ACACACTGACTACTGACTGGTGACTACTGACTGGACTGACTACTGACTGGTGACTACTGACTGG', 'TATTATTATACGCTATTATACGCGACGCGGACGCGTATACGCTATTATACGCGACGCGGACGCG']
-  # s1, s2 = ['ACACACTGACTACTGACTGGTGACTACTGACTGGACTGACTACTGACTGGTGACTACTGACTGG','TTATTATACGCGACGCGATTATACGCGACGCG']
-  # s1, s2 = ['AAGA','AAC']
-
-  _,correct_alignment,opt = basic(s1, s2)
-  print(f'Basic: {correct_alignment} {opt}\n')
-  final_s1, final_s2 = find_solution(s1, s2, correct_alignment)
-  print(final_s1)
-  print(final_s2, '\n')
-
-  alignments = efficient(s1, s2)
   
-  # plot_P(alignments)
-  # plt.show()
+  base_strings = parse_file(filename)
+  strings = generate_strings(base_strings)
+  s1, s2 = strings
+  
+  tracemalloc.start()
+  start = perf_counter()
+  alignments = efficient(s1, s2)
+  end = perf_counter()
   
   alignments.sort()
   alignments = list(k for k,_ in itertools.groupby(alignments))
+  
+  final_s1, final_s2 = find_solution(s1, s2, alignments)
+  opt = validate(final_s1, final_s2)
 
+
+  with open('output.txt','w') as f:
+    f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
+    f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
+    f.write(str(opt) + "\n")
+    f.write(str(end-start) + "\n")
+    f.write(str(tracemalloc.get_traced_memory()))
+    
+    
+  #print(validate(final_s1, final_s2)) # alignment cost value
+  '''
   print(f'Efficient: {alignments}\n')
   final_s1, final_s2 = find_solution(s1, s2, alignments)
   print(final_s1)
   print(final_s2)
-  print(validate(final_s1, final_s2))
+  print(validate(final_s1, final_s2)) # alignment cost value
+  '''

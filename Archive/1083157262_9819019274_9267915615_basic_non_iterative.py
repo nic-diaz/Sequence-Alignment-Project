@@ -5,7 +5,7 @@ from main import generate_strings
 from time import perf_counter
 import tracemalloc
 
-
+filename = sys.argv[1]
 
 ALPHA =     {('A', 'A'): 0, ('A', 'C'): 110, ('A','G'): 48, ('A', 'T'): 94,
              ('C', 'A'): 110, ('C','C'): 0, ('C','G'): 118, ('C','T'): 48,
@@ -14,62 +14,33 @@ ALPHA =     {('A', 'A'): 0, ('A', 'C'): 110, ('A','G'): 48, ('A', 'T'): 94,
 
 DELTA = 30
 
-# def alignment(A, s1, s2, i, j, path=[]):
-#     '''
-#     Finds optimal alignment after tracing back through A
-#     '''
-#     # print('\n',i,j,path)
-#     if i + j == 0: return path
-#     if i == 0: return alignment(A,s1,s2,i,j-1, path+[[i, k] for k in range(j-1,-1,-1)])
-#     if j == 0: return alignment(A,s1,s2,i-1,j, path+[[k, j] for k in range(i-1,-1,-1)])
-
-#     # if i == 0: return [[i, k] for k in range(j-1,-1,-1)]
-#     # if j == 0: return [[k, j] for k in range(i-1,-1,-1)]
-    
-    
-#     mismatch = ALPHA[(s1[i-1], s2[j-1])] + A[i-1,j-1]
-#     gap_left = DELTA + A[i-1, j]
-#     gap_up = DELTA + A[i, j-1]
-
-#     min_idx = np.argmin([mismatch, gap_up, gap_left])
-
-#     if min_idx == 0:
-#         return alignment(A, s1, s2, i-1,j-1, path+[[i-1,j-1]])
-#     elif min_idx == 1:
-#         return alignment(A, s1, s2, i, j-1, path+[[i,j-1]])
-#     else:
-#         return alignment(A, s1, s2, i-1, j, path+[[i-1,j]])
-
-
 def alignment(A, s1, s2, i, j):
     '''
     Finds optimal alignment after tracing back through A
     '''
-    path = []
-    while True:
-        if i + j == 0: return path
-        if i == 0: return path + [[i, k] for k in range(j-1,-1,-1)]
-        if j == 0: return path + [[k, j] for k in range(i-1,-1,-1)]
+    if i + j == 0: return []
+    if i == 0: return [[i, k] for k in range(j-1,-1,-1)]
+    if j == 0: return [[k, j] for k in range(i-1,-1,-1)]
     
-        mismatch = ALPHA[(s1[i-1], s2[j-1])] + A[i-1,j-1]
-        gap_left = DELTA + A[i-1, j]
-        gap_up = DELTA + A[i, j-1]
+    
+    mismatch = ALPHA[(s1[i-1], s2[j-1])] + A[i-1,j-1]
+    gap_left = DELTA + A[i-1, j]
+    gap_up = DELTA + A[i, j-1]
 
-        min_idx = np.argmin([mismatch, gap_up, gap_left])
+    min_idx = np.argmin([mismatch, gap_up, gap_left])
 
-        if min_idx == 0: i, j = i - 1, j - 1
-        elif min_idx == 1: j -= 1
-        else: i -= 1
-
-        path += [[i,j]]
-
+    if min_idx == 0:
+        return [[i-1,j-1]] + alignment(A, s1, s2, i-1,j-1)
+    elif min_idx == 1:
+        return [[i,j-1]] + alignment(A, s1, s2, i, j-1)
+    else:
+        return [[i-1,j]] + alignment(A, s1, s2, i-1, j)
 
 def find_solution(s1, s2, alignment):
     '''
     Uses alignment to generate the final strings
     '''
     final_s1, final_s2 = "", ""
-    alignment += [[len(s1), len(s2)]]
 
     for k in range(len(alignment)-1):
 
@@ -117,27 +88,25 @@ def basic(s1, s2):
             A[i, j] = min(ALPHA[(s1[i-1], s2[j-1])] + A[i-1,j-1], DELTA + A[i-1, j], DELTA + A[i, j-1])
 
     opt_alignment = alignment(A, s1, s2, len(s1), len(s2))
-    # print(f'iter: {opt_alignment=}')
+    final_s1, final_s2 = find_solution(s1, s2, opt_alignment[::-1]+[[len(s1),len(s2)]])
 
-    return A, opt_alignment[::-1], A[m-1,n-1]
+    return A[m-1,n-1], final_s1, final_s2
 
 if __name__ == "__main__":
-    base_strings = parse_file(sys.argv[1])
+    base_strings = parse_file(filename)
     strings = generate_strings(base_strings)
     s1, s2 = strings
-
+    
     tracemalloc.start()
 
     start = perf_counter()
     
-    A, opt_alignment, opt = basic(s1, s2)
-    final_s1, final_s2 = find_solution(s1, s2, opt_alignment)
+    opt, final_s1, final_s2 = basic(s1, s2)
 
     end = perf_counter()
-    print(validate(final_s1,final_s2))
+
     with open('output.txt','w') as f:
         f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
         f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
-        f.write(str(opt) + "\n")
         f.write(str(end-start) + "\n")
         f.write(str(tracemalloc.get_traced_memory()))
