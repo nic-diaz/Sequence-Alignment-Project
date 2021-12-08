@@ -41,11 +41,11 @@ DELTA = 30
 #         return alignment(A, s1, s2, i-1, j, path+[[i-1,j]])
 
 
-def alignment(A, s1, s2, i, j, path=[]):
+def alignment(A, s1, s2, i, j):
     '''
     Finds optimal alignment after tracing back through A
     '''
-    
+    path = []
     while True:
         if i + j == 0: return path
         if i == 0: return path + [[i, k] for k in range(j-1,-1,-1)]
@@ -69,6 +69,7 @@ def find_solution(s1, s2, alignment):
     Uses alignment to generate the final strings
     '''
     final_s1, final_s2 = "", ""
+    alignment += [[len(s1), len(s2)]]
 
     for k in range(len(alignment)-1):
 
@@ -116,20 +117,21 @@ def basic(s1, s2):
             A[i, j] = min(ALPHA[(s1[i-1], s2[j-1])] + A[i-1,j-1], DELTA + A[i-1, j], DELTA + A[i, j-1])
 
     opt_alignment = alignment(A, s1, s2, len(s1), len(s2))
-    final_s1, final_s2 = find_solution(s1, s2, opt_alignment[::-1]+[[len(s1),len(s2)]])
+    # print(f'iter: {opt_alignment=}')
 
-    return A, opt_alignment[::-1]+[[len(s1),len(s2)]], A[m-1,n-1], final_s1, final_s2
+    return A, opt_alignment[::-1], A[m-1,n-1]
 
 if __name__ == "__main__":
     base_strings = parse_file(sys.argv[1])
     strings = generate_strings(base_strings)
     s1, s2 = strings
-    
+
     tracemalloc.start()
 
     start = perf_counter()
     
-    A, _, opt, final_s1, final_s2 = basic(s1, s2)
+    A, opt_alignment, opt = basic(s1, s2)
+    final_s1, final_s2 = find_solution(s1, s2, opt_alignment)
 
     end = perf_counter()
     print(validate(final_s1,final_s2))
