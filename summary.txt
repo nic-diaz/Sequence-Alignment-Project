@@ -1,0 +1,21 @@
+Contributions: 
+    Adrianne Ng
+
+    Hamza Sayyid
+
+    Nicolas Diaz
+    - Troubleshooting bugs 
+    - Testing 
+
+Project Summary: 
+The basic version of the sequence alignment algorithm 
+runs in O(mn) time and O(mn) space. A dynamic programming 
+algorithm is used to store the optimal alignment values into 
+an array of size m*n. 
+
+The space efficient version of the algorithm works by usgin a 
+divide and conquer approach. The optimal value of the solution 
+is computed across a forward and backward alignment of the strings.
+Because you only need the previous and current column to compute the 
+optimal values, only two columns are needed to compute the optimal 
+alignment value for two strings, hence the program taking O(m+n) memory.
