@@ -32,11 +32,11 @@ def generate_base_strings(letters, MAX_INPUT_LEN, MAX_FINAL_STR_LEN):
     #print(f's1: {s1}, s2: {s2}')
     
     for index in range(s1_list_length):
-        insert_index = randrange(1, (index+1)*s1_len)
+        insert_index = randrange((index+1)*s1_len)
         s1_list.append(insert_index)
         
     for index in range(s2_list_length):
-        insert_index = randrange(1, (index+1)*s2_len)
+        insert_index = randrange((index+1)*s2_len)
         s2_list.append(insert_index)
     
     base_strings = {}
@@ -47,6 +47,10 @@ def generate_base_strings(letters, MAX_INPUT_LEN, MAX_FINAL_STR_LEN):
     return base_strings
 
 def test_strings(s1, s2, base_strings, verbose=0):
+    '''
+    Computes optimal cost from 2 final strings for basic and efficient versions. 
+    Verbose for debug printout
+    '''
     
     if (verbose):
         print(f'Testing {base_strings}')
@@ -64,8 +68,6 @@ def test_strings(s1, s2, base_strings, verbose=0):
             print(f'FAILED. basic: {opt_basic}, efficient: {opt_efficient}')
         else:
             print(f'PASSED. basic: {opt_basic}, efficient: {opt_efficient}')
-        
-    
     
     return 0    
     
@@ -80,8 +82,12 @@ def main():
     
     for index in range(NUM_TESTCASES):
         base_strings = generate_base_strings(letters, MAX_INPUT_LEN, MAX_FINAL_STR_LEN)
+        
+        #print(f'base strings: {base_strings}')
         strings = generate_strings(base_strings)
         s1, s2 = strings
+        
+        #print(f's1: {s1}, s2: {s2}')
         
         test_strings(s1, s2, base_strings, 1)
             
