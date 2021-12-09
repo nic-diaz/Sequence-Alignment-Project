@@ -1,14 +1,12 @@
-from basic_1083157262_9819019274_9267915615 import basic, alignment, find_solution, validate
+from basic_1083157262_9819019274_9267915615 import basic, find_solution, validate
 import sys
 import numpy as np
-from main import parse_file
-from main import generate_strings
+from main import parse_file, generate_strings
 import matplotlib.pyplot as plt
 import itertools
 from time import perf_counter
 import tracemalloc
 
-filename = sys.argv[1]
 
 ALPHA =     {('A', 'A'): 0, ('A', 'C'): 110, ('A','G'): 48, ('A', 'T'): 94,
              ('C', 'A'): 110, ('C','C'): 0, ('C','G'): 118, ('C','T'): 48,
@@ -68,9 +66,6 @@ def efficient(s1, s2, s1_offset=0, s2_offset=0):
   F = space_efficient_alignment(s1, s2[:n//2])
   G = space_efficient_alignment(s1[::-1], s2[n//2:][::-1])
 
-  # F,_,_ = basic(s1, s2[:n//2])
-  # G,_,_ = basic(s1[::-1], s2[n//2:][::-1])
-
   q_val = 100000000000
   q = 0
 
@@ -82,8 +77,6 @@ def efficient(s1, s2, s1_offset=0, s2_offset=0):
 
   P.append([s1_offset+q, s2_offset+(n//2)])
 
-  # plot_P(P)
-  # plt.show()
   efficient(s1[:q], s2[:n//2], s1_offset, s2_offset)
   
   s1_offset += q
@@ -94,15 +87,18 @@ def efficient(s1, s2, s1_offset=0, s2_offset=0):
   return P
 
 if __name__ == "__main__":
-  
-  base_strings = parse_file(filename)
+  base_strings = parse_file(sys.argv[1])
   strings = generate_strings(base_strings)
   s1, s2 = strings
-  
+  str_len = len(s1) + len(s2)
+
   tracemalloc.start()
   start = perf_counter()
   alignments = efficient(s1, s2)
   end = perf_counter()
+
+  total_time = end-start
+  total_mem = tracemalloc.get_traced_memory()[0] / 1000
   
   alignments.sort()
   alignments = list(k for k,_ in itertools.groupby(alignments))
@@ -110,19 +106,12 @@ if __name__ == "__main__":
   final_s1, final_s2 = find_solution(s1, s2, alignments)
   opt = validate(final_s1, final_s2)
 
-  with open('output.txt','w') as f:
-    f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
-    f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
-    f.write(str(opt) + "\n")
-    f.write(str(end-start) + "\n")
-    f.write(str(tracemalloc.get_traced_memory()))
-    
-    
-  #print(validate(final_s1, final_s2)) # alignment cost value
-  '''
-  print(f'Efficient: {alignments}\n')
-  final_s1, final_s2 = find_solution(s1, s2, alignments)
-  print(final_s1)
-  print(final_s2)
-  print(validate(final_s1, final_s2)) # alignment cost value
-  '''
+  # with open('output.txt','w') as f:
+  #   f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
+  #   f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
+  #   f.write(str(opt) + "\n")
+  #   f.write(str(total_time) + "\n")
+  #   f.write(str(total_mem))
+
+  with open('test.txt', 'a') as fw:
+        fw.write(f'efficient,{str_len},{total_time},{total_mem}\n')
