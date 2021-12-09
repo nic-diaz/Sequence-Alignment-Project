@@ -1,11 +1,17 @@
 Contributions: 
     Adrianne Ng
+    - Basic Algorithm Implementation
 
     Hamza Sayyid
+    - Basic Algorithm Implementation
+    - Efficient Algorithm Implementation
+    - Plot Generation
 
     Nicolas Diaz
-    - Troubleshooting bugs 
+    - Troubleshooting Bugs 
     - Testing 
+    - Efficient Algorithm Implementation
+    - String Generation
 
 Project Summary: 
 The basic version of the sequence alignment algorithm 
