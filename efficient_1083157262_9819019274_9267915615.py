@@ -106,12 +106,12 @@ if __name__ == "__main__":
   final_s1, final_s2 = find_solution(s1, s2, alignments)
   opt = validate(final_s1, final_s2)
 
-  # with open('output.txt','w') as f:
-  #   f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
-  #   f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
-  #   f.write(str(opt) + "\n")
-  #   f.write(str(total_time) + "\n")
-  #   f.write(str(total_mem))
+  with open('output.txt','w') as f:
+    f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
+    f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")
+    f.write(str(opt) + "\n")
+    f.write(str(total_time) + "\n")
+    f.write(str(total_mem))
 
-  with open('test.txt', 'a') as fw:
-        fw.write(f'efficient,{str_len},{total_time},{total_mem}\n')
+  # with open('test.txt', 'a') as fw:
+  #       fw.write(f'efficient,{str_len},{total_time},{total_mem}\n')
