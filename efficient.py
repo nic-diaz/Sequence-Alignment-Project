@@ -8,7 +8,6 @@ import itertools
 from time import perf_counter
 import tracemalloc
 
-filename = sys.argv[1]
 
 ALPHA =     {('A', 'A'): 0, ('A', 'C'): 110, ('A','G'): 48, ('A', 'T'): 94,
              ('C', 'A'): 110, ('C','C'): 0, ('C','G'): 118, ('C','T'): 48,
