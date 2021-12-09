@@ -92,7 +92,7 @@ def validate(s1, s2):
     '''
     Helper function to check the final strings optimal costs
     '''
-    print(len(s1), len(s2))
+    #print(len(s1), len(s2))
     total_costs = 0
 
     for i in range(len(s1)):
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     final_s1, final_s2 = find_solution(s1, s2, opt_alignment)
 
     end = perf_counter()
-    print(validate(final_s1,final_s2))
+    #print(validate(final_s1,final_s2))
     with open('output.txt','w') as f:
         f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")
         f.write(final_s2[:50] + " " + final_s2[-50:] + "\n")

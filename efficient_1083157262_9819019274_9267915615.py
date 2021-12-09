@@ -1,4 +1,4 @@
-from basic import basic, alignment, find_solution, validate
+from basic_1083157262_9819019274_9267915615 import basic, alignment, find_solution, validate
 import sys
 import numpy as np
 from main import parse_file
@@ -109,7 +109,6 @@ if __name__ == "__main__":
   
   final_s1, final_s2 = find_solution(s1, s2, alignments)
   opt = validate(final_s1, final_s2)
-
 
   with open('output.txt','w') as f:
     f.write(final_s1[:50] + " " + final_s1[-50:] + "\n")

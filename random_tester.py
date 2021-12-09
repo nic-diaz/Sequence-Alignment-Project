@@ -17,16 +17,18 @@ def generate_base_strings(letters, MAX_INPUT_LEN, MAX_FINAL_STR_LEN):
     s1 = ''
     s2 = ''
     
-    for index in range(s1_len):
+    for index in range(4):
         rand_indx = randrange(len(letters))
         s1 += letters[rand_indx]
         
-    for index in range(s2_len):
+    for index in range(4):
         rand_indx = randrange(len(letters))
         s2 += letters[rand_indx]
     
-    s1_list_length = randrange(MAX_FINAL_STR_LEN + 1)
-    s2_list_length = randrange(MAX_FINAL_STR_LEN + 1)
+    #s1_list_length = randrange(MAX_FINAL_STR_LEN + 1)
+    #s2_list_length = randrange(MAX_FINAL_STR_LEN + 1)
+    s1_list_length = randrange(1,11)
+    s2_list_length = randrange(1,11)
     s1_list = []
     s2_list = []
     #print(f's1: {s1}, s2: {s2}')
@@ -52,8 +54,7 @@ def test_strings(s1, s2, base_strings, verbose=0):
     Verbose for debug printout
     '''
     
-    if (verbose):
-        print(f'Testing {base_strings}')
+
     
     _, _, opt_basic = basic(s1, s2)
     
@@ -67,7 +68,13 @@ def test_strings(s1, s2, base_strings, verbose=0):
         if opt_basic != opt_efficient:
             print(f'FAILED. basic: {opt_basic}, efficient: {opt_efficient}')
         else:
-            print(f'PASSED. basic: {opt_basic}, efficient: {opt_efficient}')
+            #print(f'PASSED. basic: {opt_basic}, efficient: {opt_efficient}')
+            for word in base_strings:
+                print(word)
+                for num in base_strings[word]:
+                    print(num)
+            print(f'Problem Size: {len(s1)+len(s2)}')
+            
     
     return 0    
     
@@ -76,7 +83,7 @@ def main():
     letters = ['A', 'C', 'T', 'G']
     MAX_INPUT_LEN = 10 # Max length of string in the input.txt file (before string generation)
     MAX_FINAL_STR_LEN = 10 # Max length of final (genereated) string 2**10  
-    NUM_TESTCASES = 20 # Number of tests to run
+    NUM_TESTCASES = 1 # Number of tests to run
     
     base_strings = {}
     
