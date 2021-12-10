@@ -38,5 +38,6 @@ The run time of this algorithm still takes O(m*n) because we have to go
 through mn steps to fill out the columns of the forward and backward 
 alignment. However the runtime appears larger than the basic algorithm 
 because we recursively call the function again, splitting the string 
-according to the index that was added to P.
+according to the index that was added to P. The memory plot clearly shows the efficient algorithm 
+performing much better than the basic version.
 
