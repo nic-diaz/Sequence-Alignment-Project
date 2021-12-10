@@ -1,6 +1,7 @@
 Contributions: 
     Adrianne Ng
     - Basic Algorithm Implementation
+    - Shell Scripts
 
     Hamza Sayyid
     - Basic Algorithm Implementation
@@ -14,14 +15,28 @@ Contributions:
     - String Generation
 
 Project Summary: 
-The basic version of the sequence alignment algorithm 
-runs in O(mn) time and O(mn) space. A dynamic programming 
-algorithm is used to store the optimal alignment values into 
-an array of size m*n. 
 
-The space efficient version of the algorithm works by usgin a 
+The basic version of the sequence algnment algorithm uses an 
+array, OPT, of size m*n where OPT[m][n] stores the value of the optimal 
+alignment up to that point. So the space used is O(m*n). At each entry 
+into this array, we compare 3 values and take the minimum of them. This
+takes constant time so our basic algorithm takes O(mn) time.
+
+The space efficient version of the algorithm works by using a 
 divide and conquer approach. The optimal value of the solution 
 is computed across a forward and backward alignment of the strings.
 Because you only need the previous and current column to compute the 
 optimal values, only two columns are needed to compute the optimal 
-alignment value for two strings, hence the program taking O(m+n) memory.
+alignment value for two strings. We know the resulting alignment will not
+be greater than length of m+n, the only case where it would reach m+n is
+if none of the characters of the first string match up with those of the 
+second string. So we can store the resulting alignment in an array, P, 
+that has the maximum size of m+n. Whatever index gives the minimum of the 
+forward alignment + backward alignment would be stored in P and can be used 
+to trace back the actual alignment.
+The run time of this algorithm still takes O(m*n) because we have to go 
+through mn steps to fill out the columns of the forward and backward 
+alignment. However the runtime appears larger than the basic algorithm 
+because we recursively call the function again, splitting the string 
+according to the index that was added to P.
+
